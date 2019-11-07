@@ -8,13 +8,14 @@ class Block:
     row, col -- position on board
     factors -- factors list of number value
     """
-    def __init__(self, row: int, col: int, value: int, factors: list):
+    def __init__(self, row: int, col: int, value: int):
         self.row = row
         self.col = col
         self.value = value
-        self.factors = factors
+        self.factors = self._calculate_factors()
+        self.factor_pointer = 0
 
-    def calculate_factors(self):
+    def _calculate_factors(self):
         """Update the factors list"""
         factors = []
         bound = round(sqrt(self.value)) + 1
@@ -25,4 +26,4 @@ class Block:
                 else:
                     factors.append(i)
                     factors.append(self.value // i)
-        self.factors = factors
+        return factors

@@ -1,4 +1,4 @@
-from board import Board
+from game_board import Board
 from point import Point
 
 
@@ -39,6 +39,11 @@ class Rectangle:
                         self.board.solution[row][col] != -1:
                     return True
         return False
+
+    def clear(self):
+        """Fill rectangle with -1"""
+        self.color = -1
+        self.draw_rectangle()
 
     def draw_rectangle(self):
         """Fill rectangle with color"""

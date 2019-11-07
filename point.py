@@ -2,7 +2,7 @@ class Point:
     """
     A point identified by (x,y) coordinates.
 
-    supports: +, -, str, repr
+    supports: +, -, str, repr, eq
 
     clone  -- construct a duplicate
     move_to  -- reset x & y
@@ -25,6 +25,9 @@ class Point:
 
     def __repr__(self) -> str:
         return "%s(%r, %r)" % (self.__class__.__name__, self.x, self.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
     def clone(self) -> 'Point':
         """Return a full copy of this point."""
