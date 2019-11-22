@@ -1,21 +1,39 @@
+import argparse
 import glob
-from game_board import Board
+from game_board import GameBoard
+from cube_game_board import CubeGameBoard
 import colorama
 from rectangle import Rectangle
 from point import Point
+from texture_factory import TextureFactory
+import form
 
 
 def main():
     colorama.init()
-    filenames = sorted(glob.glob("puzzles/*.txt"))
+    namespace = parse_args()
+    namespace.cube = True # todo
+    filenames = sorted(
+        glob.glob('puzzles/*.txt')) if not namespace.cube else sorted(
+        glob.glob('cube_puzzles/*.txt'))
     for filename in filenames:
-        board = Board(filename)
+        if namespace.cube:
+            board = CubeGameBoard(filename)
+            board.read_board()
+            for curr_board in board.boards:
+                backtrack(0, curr_board)
+            texture_factory = TextureFactory(board.boards)
+            texture_factory.generate_textures()
+            form.main()
+            return
+        board = GameBoard(filename)
+        board.read_board()
         print(filename)
         backtrack(0, board)
         board.print_solution()
 
 
-def backtrack(block_pointer: int, board: Board):
+def backtrack(block_pointer: int, board: GameBoard):
     # if all blocks are visited the solution is found
     if block_pointer > len(board.blocks) - 1:
         return True
@@ -58,7 +76,18 @@ def backtrack(block_pointer: int, board: Board):
         board.blocks[block_pointer].factor_pointer = 0
 
 
-def _is_area_full_covered(board: Board, block_pointer: int) -> bool:
+def parse_args():
+    parser = argparse.ArgumentParser(add_help=True)
+
+    parser.add_argument(
+        '-cube',
+        help='2D rectangle or 3D cube shikaku',
+        action='store_true'
+    )
+    return parser.parse_args()
+
+
+def _is_area_full_covered(board: GameBoard, block_pointer: int) -> bool:
     """Check if the block covers the maximum possible area"""
     for i in range(len(board.final_cells_values[block_pointer])):
         row = board.final_cells_values[block_pointer][i][0]

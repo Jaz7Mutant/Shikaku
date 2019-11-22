@@ -1,4 +1,4 @@
-from game_board import Board
+from game_board import GameBoard
 from point import Point
 
 
@@ -12,7 +12,7 @@ class Rectangle:
        |-----bottom_right         V
                                  +oo
     """
-    def __init__(self, board: Board,
+    def __init__(self, board: GameBoard,
                  position_1: Point,
                  position_2: Point,
                  color: int):

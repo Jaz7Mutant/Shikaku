@@ -4,12 +4,12 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from game_board import Board
+from game_board import GameBoard
 
 
 class TestBoard(unittest.TestCase):
     def test_board_init(self):
-        board = Board('tests/test_puzzle.txt')
+        board = GameBoard('tests/test_puzzle.txt')
         self.assertEqual(board.rows, 3)
         self.assertEqual(board.cols, 3)
         self.assertEqual(board.board, [[3, 4, -1], [-1, -1, -1], [-1, 2, -1]])

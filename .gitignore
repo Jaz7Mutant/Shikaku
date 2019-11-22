@@ -8,6 +8,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+Garbage
 .Python
 build/
 develop-eggs/

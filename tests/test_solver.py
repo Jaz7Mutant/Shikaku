@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from game_board import Board
+from game_board import GameBoard
 import shikaku_solver
 
 
@@ -11,10 +11,10 @@ import shikaku_solver
 class TestSolver(unittest.TestCase):
 
     def test_no_name(self):
-        self.assertRaises(FileNotFoundError, Board, 'tests/no_file.txt')
+        self.assertRaises(FileNotFoundError, GameBoard, 'tests/no_file.txt')
 
     def test_common_puzzle(self):
-        board = Board('tests/test_puzzle.txt')
+        board = GameBoard('tests/test_puzzle.txt')
         shikaku_solver.backtrack(0, board)
         self.assertEqual(board.solution, [[0, 1, 1], [0, 1, 1], [0, 2, 2]])
 

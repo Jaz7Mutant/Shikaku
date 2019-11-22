@@ -20,7 +20,7 @@ from colors import BACK_COLORS, colorize_back, colorize_front, FORE_COLORS
 from point import Point
 
 
-class Board:
+class GameBoard:
     """
     A game board
 
@@ -37,7 +37,8 @@ class Board:
         self.solution = list(list())
         self.blocks = list()
         self.final_cells_values = list(list())
-        self._read_board(filename)
+        # self.read_board(filename)
+        self.filename = filename
 
     def print_solution(self) -> None:
         """
@@ -45,33 +46,39 @@ class Board:
 
         :return:
         """
-        void = ' '.center(4)
+        void = ' '.center(7)
         for row_num, row in enumerate(self.solution):
             current_row = ''
+            curr_row_with_num = ''
             for col_num, symbol in enumerate(row):
                 color = int(symbol) % (len(BACK_COLORS) - 1)
                 if self.board[row_num][col_num] == -1:
                     current_line = colorize_back(void, BACK_COLORS[color])
-                    print(current_line, end='')
+                    # print(current_line, end='')
+                    curr_row_with_num += current_line
                     current_row += current_line
                 else:
                     current_line = colorize_front(
                         colorize_back(
-                            str(self.board[row_num][col_num]).center(4),
+                            str(self.board[row_num][col_num]).center(7),
                             BACK_COLORS[color]),
-                        FORE_COLORS[1])
-                    print(current_line, end='')
+                        FORE_COLORS[0])
+                    curr_row_with_num += current_line
+                    # print(current_line, end='')
                     current_row += colorize_back(void, BACK_COLORS[color])
-            print('\n' + current_row)
+            # print('\n' + current_row)
+            print(current_row)
+            print(curr_row_with_num)
+            print(current_row)
 
-    def _read_board(self, filename: str) -> None:
+    def read_board(self) -> None:
         """
         Read board from disk using its filename
 
         :param filename: Name of the file
         :return:
         """
-        with open(filename, "r") as input_file:
+        with open(self.filename, "r") as input_file:
             self.rows, self.cols = map(int, input_file.readline().split(' '))
             if self.rows <= 0 or self.cols <= 0:
                 raise ValueError(
@@ -85,9 +92,9 @@ class Board:
                     else:
                         self.board[row][col] = int(cell)
                         self.blocks.append(Block(row, col, int(cell)))
-        self._initialize_board_solution()
+        self.initialize_board_solution()
 
-    def _initialize_board_solution(self):
+    def initialize_board_solution(self):
         from rectangle import Rectangle
         initial_solution_state = [[-1 for c in range(self.cols)] for r in
                                   range(self.rows)]
