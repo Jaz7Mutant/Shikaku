@@ -5,12 +5,14 @@ import math
 
 class Model:
     def __init__(self):
-        texture_filenames = ['textures/0.png',
-                             'textures/1.png',
-                             'textures/2.png',
-                             'textures/3.png',
-                             'textures/4.png',
-                             'textures/5.png']
+        texture_filenames = [
+            'textures/0.png',
+            'textures/1.png',
+            'textures/2.png',
+            'textures/3.png',
+            'textures/4.png',
+            'textures/5.png'
+        ]
         self.textures = list()
         self.get_textures(texture_filenames)
         self.batch = pyglet.graphics.Batch()
@@ -144,6 +146,10 @@ class Window(pyglet.window.Window):
         self.push(self.player.pos, self.player.rot)
         self.model.draw()
         glPopMatrix()
+
+    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
+        pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, (
+        'v2f', [x, y, x - dx, y, x - dx, y - dy, x, y - dy]))
 
 
 def main():

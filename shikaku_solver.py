@@ -1,12 +1,12 @@
 import argparse
 import glob
-from game_board import GameBoard
-from cube_game_board import CubeGameBoard
+from Solver.game_board import GameBoard
+from Solver.cube_game_board import CubeGameBoard
 import colorama
-from rectangle import Rectangle
-from point import Point
-from texture_factory import TextureFactory
-import form
+from Utilities.rectangle import Rectangle
+from Utilities.point import Point
+from Utilities.texture_factory import TextureFactory
+from Form import form
 
 
 def main():
