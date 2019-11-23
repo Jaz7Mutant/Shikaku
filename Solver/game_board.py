@@ -15,9 +15,9 @@ First line contains numbers of rows and cols
 numbers means the area of rectangle that should contain it cell
 """
 from copy import deepcopy
-from block import Block
-from colors import BACK_COLORS, colorize_back, colorize_front, FORE_COLORS
-from point import Point
+from Solver.block import Block
+from Utilities.colors import BACK_COLORS, colorize_back, colorize_front, FORE_COLORS
+from Utilities.point import Point
 
 
 class GameBoard:
@@ -95,7 +95,7 @@ class GameBoard:
         self.initialize_board_solution()
 
     def initialize_board_solution(self):
-        from rectangle import Rectangle
+        from Utilities.rectangle import Rectangle
         initial_solution_state = [[-1 for c in range(self.cols)] for r in
                                   range(self.rows)]
         for i in range(len(self.blocks)):

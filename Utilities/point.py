@@ -8,7 +8,7 @@ class Point:
     move_to  -- reset x & y
     """
 
-    def __init__(self, x: int = 0, y: int = 0):
+    def __init__(self, x: float = 0, y: float = 0):
         self.x = x
         self.y = y
 
@@ -33,7 +33,7 @@ class Point:
         """Return a full copy of this point."""
         return Point(self.x, self.y)
 
-    def move_to(self, x: int, y: int):
+    def move_to(self, x: float, y: float):
         """Reset x & y coordinates."""
         self.x = x
         self.y = y

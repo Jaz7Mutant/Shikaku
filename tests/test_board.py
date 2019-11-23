@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from game_board import GameBoard
+from Solver.game_board import GameBoard
 
 
 class TestBoard(unittest.TestCase):

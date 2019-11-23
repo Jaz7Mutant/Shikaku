@@ -9,6 +9,7 @@ __pycache__/
 
 # Distribution / packaging
 Garbage
+*raw/
 .Python
 build/
 develop-eggs/

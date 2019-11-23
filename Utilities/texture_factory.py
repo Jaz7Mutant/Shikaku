@@ -1,7 +1,7 @@
 from typing import List
 from PIL import Image, ImageFont, ImageDraw
-from texture_colors import COLORS
-from game_board import GameBoard
+from Utilities.texture_colors import COLORS
+from Solver.game_board import GameBoard
 
 
 class TextureFactory:
@@ -47,4 +47,4 @@ class TextureFactory:
                             text=text, fill='black', font=font)
                     curr_x += cell_size
                     curr_y += cell_size
-            image.save('textures/' + str(file_num) + '.png', 'PNG')
+            image.save('Resources/textures/' + str(file_num) + '.png', 'PNG')
