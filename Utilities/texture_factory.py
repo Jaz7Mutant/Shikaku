@@ -7,6 +7,7 @@ from Solver.game_board import GameBoard
 class TextureFactory:
     def __init__(self, boards: List[GameBoard]):
         self.boards = boards
+        self.filename = None
 
     def generate_textures(self):
         for file_num, board in enumerate(self.boards):
@@ -21,6 +22,8 @@ class TextureFactory:
             for row_num, row in enumerate(board.solution):
                 for col_num, symbol in enumerate(row):
                     color = COLORS[int(symbol) % (len(COLORS) - 1)]
+                    if symbol == -1:
+                        color = COLORS[-1]
                     curr_x = int(col_num * cell_size) + offset
                     curr_y = int(row_num * cell_size) + offset
 
@@ -47,4 +50,12 @@ class TextureFactory:
                             text=text, fill='black', font=font)
                     curr_x += cell_size
                     curr_y += cell_size
-            image.save('Resources/textures/' + str(file_num) + '.png', 'PNG')
+            curr_file = str(file_num)
+            if self.filename is not None:
+                curr_file = self.filename
+            image.save('Resources/textures/' + curr_file + '.png', 'PNG')
+
+    def generate_single_texture(self, filename: str, board: GameBoard):
+        self.boards = [board]
+        self.filename = filename
+        self.generate_textures()

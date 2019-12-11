@@ -75,10 +75,10 @@ class Cube:
         z2 = -z1
         x22 = -x11
         z22 = -z11
-        # y1 = math.sin(self.i)
-        # y2 = math.sin(self.i + math.pi/2)
-        # y22 = -y1
-        # y11 = -y2
+        # y1 = math.cos(self.i)
+        # y2 = math.sin(self.i + math.pi/2) + math.sin(math.cos(self.i))
+        # y22 = math.cos(self.i) + math.sin(self.i) - y2
+        # y11 = math.sin(self.i)
         y11 = -math.sqrt(2) / 2
         y22 = math.sqrt(2) / 2
         y1 = -math.sqrt(2) / 2

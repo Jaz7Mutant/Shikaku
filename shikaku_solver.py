@@ -6,7 +6,7 @@ import colorama
 from Utilities.rectangle import Rectangle
 from Utilities.point import Point
 from Utilities.texture_factory import TextureFactory
-from Form import form
+from Form import window
 
 
 def main():
@@ -24,13 +24,17 @@ def main():
                 backtrack(0, curr_board)
             texture_factory = TextureFactory(board.boards)
             texture_factory.generate_textures()
-            form.main()
+            window.main(board.boards)
             return
         board = GameBoard(filename)
         board.read_board()
         print(filename)
         backtrack(0, board)
         board.print_solution()
+        if board.verifySolution():
+            print('Zaebis')
+        else:
+            print('hui')
 
 
 def backtrack(block_pointer: int, board: GameBoard):

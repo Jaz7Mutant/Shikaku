@@ -10,10 +10,12 @@ import shikaku_solver
 class TestSolver(unittest.TestCase):
 
     def test_no_name(self):
-        self.assertRaises(FileNotFoundError, GameBoard, 'tests/no_file.txt')
+        board = GameBoard('tests/no_file.txt')
+        self.assertRaises(FileNotFoundError, board.read_board)
 
     def test_common_puzzle(self):
         board = GameBoard('tests/test_puzzle.txt')
+        board.read_board()
         shikaku_solver.backtrack(0, board)
         self.assertEqual(board.solution, [[0, 1, 1], [0, 1, 1], [0, 2, 2]])
 

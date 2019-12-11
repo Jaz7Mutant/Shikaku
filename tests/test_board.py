@@ -10,6 +10,7 @@ from Solver.game_board import GameBoard
 class TestBoard(unittest.TestCase):
     def test_board_init(self):
         board = GameBoard('tests/test_puzzle.txt')
+        board.read_board()
         self.assertEqual(board.rows, 3)
         self.assertEqual(board.cols, 3)
         self.assertEqual(board.board, [[3, 4, -1], [-1, -1, -1], [-1, 2, -1]])

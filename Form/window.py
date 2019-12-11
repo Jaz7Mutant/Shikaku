@@ -2,43 +2,13 @@ from pyglet.gl import *
 from pyglet.window import key
 import math
 from Form.cube import Cube
+from Form.game import Game
 from Form.interactive_field import InteractiveField
-
-
-class Player:
-    def __init__(self, pos=(0, 0, 0), rot=(0, 0)):
-        self.pos = list(pos)
-        self.rot = list(rot)
-        self.i = 0.1
-
-    def mouse_motion(self, dx, dy):  # todo Исправить
-        dx /= 8
-        dy /= 8
-        self.rot[0] += dy
-        self.rot[1] -= dx
-        if self.rot[0] > 90:
-            self.rot[0] = 90
-        elif self.rot[0] < -90:
-            self.rot[0] = -90
-
-    def update(self, dt, keys):
-        s = dt * 10
-        rotY = -self.rot[1] / 180 * math.pi
-        dx, dz = s * math.sin(rotY), s * math.cos(rotY)
-        if keys[key.W]: self.pos[0] += dx; self.pos[2] -= dz
-        if keys[key.S]: self.pos[0] -= dx; self.pos[2] += dz
-        if keys[key.A]: self.pos[0] -= dz; self.pos[2] -= dx
-        if keys[key.D]: self.pos[0] += dz; self.pos[2] += dx
-
-        if keys[key.SPACE]: self.pos[1] += s
-        if keys[key.LSHIFT]: self.pos[1] -= s
-        # TODO Исправить
-        self.i += 0.01 # TODO Сделать общий счетчик?
-        self.i %= 100
+from Form.player import Player
 
 
 class Window(pyglet.window.Window):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, boards, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.set_minimum_size(300, 200)
         self.keys = key.KeyStateHandler()
@@ -46,12 +16,19 @@ class Window(pyglet.window.Window):
         pyglet.clock.schedule(self.update)
         self.model = Cube(True)
         self.player = Player((0, 1.5, 1.5), (-30, 0))
-        self.field = InteractiveField('Resources/textures/0.png', 3, 0, 0, 3.5, 0.5, 0)
+        self.fields = []
+        self.boards = boards
+        self.restart = False
+        glDepthFunc(GL_LEQUAL)
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+        for i in range(6):
+            self.fields.append(InteractiveField(
+                'Resources/textures/' + str(i) + '.png', i + 3, 0, 0, i + 3.5, 0.5, 0))
 
     def push(self, pos, rot):
         glPushMatrix()
-        glRotatef(-rot[0], 1, 0, 0);
-        glRotatef(-rot[1], 0, 1, 0);
+        glRotatef(-rot[0], 1, 0, 0)
+        glRotatef(-rot[1], 0, 1, 0)
         glTranslatef(-pos[0], -pos[1], -pos[2], )
         # gluLookAt(pos[0], pos[1], pos[2], 0, 0, 0, 0, 1, 0)
 
@@ -93,6 +70,11 @@ class Window(pyglet.window.Window):
         self.player.update(dt, self.keys)
 
     def on_draw(self):
+        if self.restart:
+            for field in self.fields:
+                field.restart()
+            self.model = Cube(True)
+            self.restart = False
         # sleep(0.5)
         self.clear()
         self.set3d()
@@ -100,20 +82,36 @@ class Window(pyglet.window.Window):
         glEnable(GL_BLEND)
         self.push(self.player.pos, self.player.rot)
         self.model.draw()
-        self.field.draw()
+        for field_num, field in enumerate(self.fields):
+            if not field.check_intersection(self.player.pos):
+                field.draw()
+            else:
+                self.player.pos = field.get_player_pos()
+                self.keys.clear()
+                # self.restart = True
+                # glPopMatrix()
+                # self.player.pos = [0,0,0]
+                window2 = Game(field_num, self.boards[field_num], self, width=800, height=600,
+                                caption='Shikaku solver field',
+                                resizable=True)
+                glClearColor(0.3, 0.8, 1, 1)
+                # glClearDepth(1.0)
+                pyglet.app.run()
+                self.model = Cube(True)
+                return
+
         glPopMatrix()
 
-    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, (
-            'v2f', [x, y, x - dx, y, x - dx, y - dy, x, y - dy]))
 
 
-def main():
-    window = Window(width=800, height=600, caption='Shikaku solver',
+
+def main(boards):
+    window = Window(boards, width=800, height=600, caption='Shikaku solver',
                     resizable=True)
     glClearColor(0.5, 0.7, 1, 1)
+    # glClearDepth(1.0)
     pyglet.app.run()
 
 
 if __name__ == '__main__':
-    main()
+    main([])

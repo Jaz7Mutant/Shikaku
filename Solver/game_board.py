@@ -14,6 +14,7 @@ First line contains numbers of rows and cols
 '-' means empty space
 numbers means the area of rectangle that should contain it cell
 """
+import sys
 from copy import deepcopy
 from Solver.block import Block
 from Utilities.colors import BACK_COLORS, colorize_back, colorize_front, FORE_COLORS
@@ -123,6 +124,38 @@ class GameBoard:
                             continue
         self._update_final_cells_values()
         self.solution = initial_solution_state
+
+    def verifySolution(self) -> bool:
+
+        # Verify the following things about each anchor i which is in position (row,col) and has value val.
+        #  (1) solution[row][col] should equal i due to the chosen solution format.
+        #  (2) the number of i's in solution should equal val.
+        #  (3) the i's in solution should form a rectangle.
+        for i, block in enumerate(self.blocks):
+
+            # Verify (1).
+            if self.solution[block.row][block.col] != i:
+                return False
+
+            # Get all positions where solution is equal to i.
+            wherei = [(r, c) for r in range(self.rows) for c in range(self.cols) if
+                      self.solution[r][c] == i]
+            numi = len(wherei)
+
+            # Verify (2).
+            if numi != block.value:
+                return False
+
+            # Verify (3).
+            left = min(wherei, key=lambda x: x[0])[0]
+            right = max(wherei, key=lambda x: x[0])[0]
+            top = min(wherei, key=lambda x: x[1])[1]
+            bottom = max(wherei, key=lambda x: x[1])[1]
+            area = (right - left + 1) * (bottom - top + 1)
+            if area != numi:
+                return False
+
+        return True
 
     def _update_final_cells_values(self):
         self.final_cells_values = [[] for i in range(len(self.blocks))]
