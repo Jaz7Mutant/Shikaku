@@ -8,7 +8,7 @@ class Player:
         self.rot = list(rot)
         self.i = 0.1
 
-    def mouse_motion(self, dx, dy):  # todo Исправить
+    def mouse_motion(self, dx, dy):
         dx /= 8
         dy /= 8
         self.rot[0] += dy
@@ -20,15 +20,24 @@ class Player:
 
     def update(self, dt, keys):
         s = dt * 5
-        rotY = -self.rot[1] / 180 * math.pi
-        dx, dz = s * math.sin(rotY), s * math.cos(rotY)
-        if keys[key.W]: self.pos[0] += dx; self.pos[2] -= dz
-        if keys[key.S]: self.pos[0] -= dx; self.pos[2] += dz
-        if keys[key.A]: self.pos[0] -= dz; self.pos[2] -= dx
-        if keys[key.D]: self.pos[0] += dz; self.pos[2] += dx
+        rot_y = -self.rot[1] / 180 * math.pi
+        dx, dz = s * math.sin(rot_y), s * math.cos(rot_y)
+        if keys[key.W]:
+            self.pos[0] += dx
+            self.pos[2] -= dz
+        if keys[key.S]:
+            self.pos[0] -= dx
+            self.pos[2] += dz
+        if keys[key.A]:
+            self.pos[0] -= dz
+            self.pos[2] -= dx
+        if keys[key.D]:
+            self.pos[0] += dz
+            self.pos[2] += dx
+        if keys[key.SPACE]:
+            self.pos[1] += s
+        if keys[key.LSHIFT]:
+            self.pos[1] -= s
 
-        if keys[key.SPACE]: self.pos[1] += s
-        if keys[key.LSHIFT]: self.pos[1] -= s
-        # TODO Исправить
-        self.i += 0.01  # TODO Сделать общий счетчик?
+        self.i += 0.01
         self.i %= 100

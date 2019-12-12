@@ -1,117 +1,101 @@
+from typing import List
+
 from pyglet.gl import *
 from pyglet.window import key
-import math
+
+import Form.game
 from Form.cube import Cube
-from Form.game import Game
-from Form.interactive_field import InteractiveField
+from Form.cube_face import CubeFace
 from Form.player import Player
+from Solver.game_board import GameBoard
+
+
+def start(boards: List[GameBoard]):
+    window = Window(boards, width=800, height=600, caption='Shikaku solver',
+                    resizable=True)
+    glDepthFunc(GL_LEQUAL)
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+    glEnable(GL_DEPTH_TEST)
+    glEnable(GL_BLEND)
+    glClearColor(0.5, 0.7, 1, 1)
+    glClearDepth(1.0)
+    window.set_minimum_size(300, 200)
+    window.set_exclusive_mouse(True)
+    window.set_mouse_visible(False)
+    pyglet.app.run()
+
+
+def push(pos, rot):
+    glPushMatrix()
+    glRotatef(-rot[0], 1, 0, 0)
+    glRotatef(-rot[1], 0, 1, 0)
+    glTranslatef(-pos[0], -pos[1], -pos[2], )
+
+
+def model():
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+
+def projection():
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
 
 
 class Window(pyglet.window.Window):
-    def __init__(self, boards, *args, **kwargs):
+    RESTART = False
+
+    def __init__(self, boards: List[GameBoard], *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.set_minimum_size(300, 200)
         self.keys = key.KeyStateHandler()
         self.push_handlers(self.keys)
-        pyglet.clock.schedule(self.update)
-        self.model = Cube(True)
-        self.player = Player((0, 1.5, 1.5), (-30, 0))
-        self.fields = []
         self.boards = boards
-        self.restart = False
-        glDepthFunc(GL_LEQUAL)
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+        self.cube = Cube(True)
+        self.player = Player((0, 1.5, 1.5), (-3, 0))
+        self.cube_faces = []
         for i in range(6):
-            self.fields.append(InteractiveField(
-                'Resources/textures/' + str(i) + '.png', i + 3, 0, 0, i + 3.5, 0.5, 0))
-
-    def push(self, pos, rot):
-        glPushMatrix()
-        glRotatef(-rot[0], 1, 0, 0)
-        glRotatef(-rot[1], 0, 1, 0)
-        glTranslatef(-pos[0], -pos[1], -pos[2], )
-        # gluLookAt(pos[0], pos[1], pos[2], 0, 0, 0, 0, 1, 0)
-
-    def Projection(self):
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-
-    def Model(self):
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
-
-    def set2d(self):
-        self.Projection()
-        gluOrtho2D(0, self.width, 0, self.height)
-        self.Model()
-
-    def set3d(self):
-        self.Projection()
-        gluPerspective(70, self.width / self.height, 0.05, 1000)
-        self.Model()
-
-    def setLock(self, state):
-        self.lock = state
-        self.set_exclusive_mouse(state)
-
-    lock = False
-    mouse_lock = property(lambda self: self.lock, setLock)
-
-    def on_mouse_motion(self, x, y, dx, dy):
-        if self.mouse_lock: self.player.mouse_motion(dx, dy)
-
-    def on_key_press(self, KEY, MOD):
-        if KEY == key.ESCAPE:
-            self.close()
-        elif KEY == key.E:
-            self.mouse_lock = not self.mouse_lock
+            self.cube_faces.append(CubeFace(
+                'Resources/textures/' + str(i) + '.png',
+                i + 3, 0, 0, i + 3.5, 0.5, 0))
+        pyglet.clock.schedule(self.update)
 
     def update(self, dt):
         self.player.update(dt, self.keys)
 
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.player.mouse_motion(dx, dy)
+
+    def on_key_press(self, KEY, MOD):
+        if KEY == key.ESCAPE:
+            self.close()
+            del self
+
     def on_draw(self):
-        if self.restart:
-            for field in self.fields:
-                field.restart()
-            self.model = Cube(True)
-            self.restart = False
-        # sleep(0.5)
+        if Window.RESTART:
+            for cube_face in self.cube_faces:
+                cube_face.restart()
+            self.cube = Cube(True)
+            Window.RESTART = False
         self.clear()
         self.set3d()
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_BLEND)
-        self.push(self.player.pos, self.player.rot)
-        self.model.draw()
-        for field_num, field in enumerate(self.fields):
-            if not field.check_intersection(self.player.pos):
-                field.draw()
+        push(self.player.pos, self.player.rot)
+        self.cube.draw()
+        for field_num, cube_face in enumerate(self.cube_faces):
+            if not cube_face.check_intersection(self.player.pos):
+                cube_face.draw()
             else:
-                self.player.pos = field.get_player_pos()
+                self.player.pos = cube_face.get_player_pos()
                 self.keys.clear()
-                # self.restart = True
-                # glPopMatrix()
-                # self.player.pos = [0,0,0]
-                window2 = Game(field_num, self.boards[field_num], self, width=800, height=600,
-                                caption='Shikaku solver field',
-                                resizable=True)
-                glClearColor(0.3, 0.8, 1, 1)
-                # glClearDepth(1.0)
-                pyglet.app.run()
-                self.model = Cube(True)
+                Form.game.start(str(field_num), self.boards[field_num])
                 return
-
         glPopMatrix()
 
+    def set3d(self):
+        projection()
+        gluPerspective(70, self.width / self.height, 0.01, 1000)
+        model()
 
-
-
-def main(boards):
-    window = Window(boards, width=800, height=600, caption='Shikaku solver',
-                    resizable=True)
-    glClearColor(0.5, 0.7, 1, 1)
-    # glClearDepth(1.0)
-    pyglet.app.run()
-
-
-if __name__ == '__main__':
-    main([])
+    def set2d(self):
+        projection()
+        gluOrtho2D(0, self.width, 0, self.height)
+        model()

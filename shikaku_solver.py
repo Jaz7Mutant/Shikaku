@@ -20,11 +20,11 @@ def main():
         if namespace.cube:
             board = CubeGameBoard(filename)
             board.read_board()
-            for curr_board in board.boards:
-                backtrack(0, curr_board)
+            # for curr_board in board.boards:
+            #     backtrack(0, curr_board)
             texture_factory = TextureFactory(board.boards)
             texture_factory.generate_textures()
-            window.main(board.boards)
+            window.start(board.boards)
             return
         board = GameBoard(filename)
         board.read_board()

@@ -52,8 +52,10 @@ class Rectangle:
                 self.board.solution[row][col] = self.color
 
     def find_color(self):
+        """Find color from nearest block with number"""
         for x in range(self.top_left.x, self.bottom_right.x + 1):
             for y in range(self.top_left.y, self.bottom_right.y + 1):
                 if self.board.board[y][x] != -1:
-                    return self.board.solution[y][x]
-        return -1
+                    self.color = self.board.solution[y][x]
+                    return
+        self.color = -1
