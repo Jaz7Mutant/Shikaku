@@ -26,3 +26,10 @@ class TestPoint(unittest.TestCase):
 
     def test_point_to_string(self):
         self.assertEqual(str(Point(2, 3)), '(2, 3)')
+
+    def test_clone(self):
+        point = Point(2, 4)
+        new_point = point.clone()
+        self.assertEqual(point, new_point)
+        point.move_to(0, 0)
+        self.assertNotEqual(point, new_point)

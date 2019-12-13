@@ -1,7 +1,9 @@
 from typing import List
+
 from PIL import Image, ImageFont, ImageDraw
-from Utilities.texture_colors import COLORS
+
 from Solver.game_board import GameBoard
+from Utilities.texture_colors import COLORS
 
 
 class TextureFactory:
@@ -34,7 +36,7 @@ class TextureFactory:
                             fill=color,
                             outline='black',
                             width=2
-                            )
+                        )
                     else:
                         draw.rectangle(
                             [(curr_x, curr_y),
@@ -42,7 +44,7 @@ class TextureFactory:
                             fill=color,
                             outline='black',
                             width=2
-                            )
+                        )
                         text = str(board.board[row_num][col_num])
                         draw.text(
                             (curr_x + (cell_size - w) / 2,

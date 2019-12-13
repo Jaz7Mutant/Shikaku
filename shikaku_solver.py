@@ -1,39 +1,40 @@
 import argparse
 import glob
-from Solver.game_board import GameBoard
-from Solver.cube_game_board import CubeGameBoard
+
 import colorama
-from Utilities.rectangle import Rectangle
+
+from Form.window import start
+from Solver.cube_game_board import CubeGameBoard
+from Solver.game_board import GameBoard
 from Utilities.point import Point
+from Utilities.rectangle import Rectangle
 from Utilities.texture_factory import TextureFactory
-from Form import window
 
 
 def main():
     colorama.init()
     namespace = parse_args()
-    filenames = sorted(
+    file_names = sorted(
         glob.glob('Resources/puzzles/*.txt')) if not namespace.cube \
         else sorted(glob.glob('Resources/cube_puzzles/*.txt'))
-    for filename in filenames:
+
+    for filename in file_names:
         if namespace.cube:
             board = CubeGameBoard(filename)
             board.read_board()
-            # for curr_board in board.boards:
-            #     backtrack(0, curr_board)
             texture_factory = TextureFactory(board.boards)
             texture_factory.generate_textures()
-            window.start(board.boards)
-            return
+            start(board.boards)
+            continue
         board = GameBoard(filename)
         board.read_board()
         print(filename)
         backtrack(0, board)
         board.print_solution()
-        if board.verifySolution():
-            print('Zaebis')
+        if board.verify_solution():
+            print('Solved')
         else:
-            print('hui')
+            print('Not solved')
 
 
 def backtrack(block_pointer: int, board: GameBoard):

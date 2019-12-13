@@ -43,6 +43,8 @@ class Cube:
         y2 = -y1
         y11 = y1
         y22 = -y1
+
+        # uncomment it just for fun
         # y1 = math.cos(self.i)
         # y2 = math.sin(self.i + math.pi/2) + math.sin(math.cos(self.i))
         # y22 = math.cos(self.i) + math.sin(self.i) - y2
@@ -70,4 +72,4 @@ class Cube:
         self.sides[5].vertices = A + B + C + D
         self.batch.draw()
         self.i += 0.01
-        self.i %= 100
+        self.i %= 10

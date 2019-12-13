@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Callable
 
 from pyglet.gl import *
 from pyglet.window import key, mouse
@@ -11,8 +12,8 @@ from Utilities.texture_colors import COLORS
 from Utilities.texture_factory import TextureFactory
 
 
-def start(field_num: str, game_board: GameBoard):
-    window = Game(field_num, game_board, width=800, height=600,
+def start_game(field_num: str, game_board: GameBoard, finally_func: Callable):
+    window = Game(field_num, game_board, finally_func, width=800, height=600,
                   caption=f'puzzle #{field_num}', resizable=True)
     window.set_minimum_size(300, 200)
     glClearColor(0.3, 0.8, 1, 1)
@@ -23,12 +24,14 @@ def start(field_num: str, game_board: GameBoard):
 
 
 class Game(pyglet.window.Window):
-    def __init__(self, filename: str, game_board: GameBoard, *args, **kwargs):
+    def __init__(self, filename: str, game_board: GameBoard,
+                 finally_func: Callable, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.keys = key.KeyStateHandler()
         self.push_handlers(self.keys)
         self.filename = filename
         self.board = game_board
+        self.finally_func = finally_func
         self.pressed_cords = []
         self.released_cords = []
 
@@ -71,6 +74,7 @@ class Game(pyglet.window.Window):
         for line in self.squares:
             for square in line:
                 square.draw()
+        self.check_solution()
 
     def on_mouse_press(self, x, y, button, modifiers):
         self.solution_backup = deepcopy(self.board.solution)
@@ -102,12 +106,11 @@ class Game(pyglet.window.Window):
                     self.board.cols - self.released_cords[1] - 1))
             self.update_solution(point1, point2)
 
-    def on_key_press(self, KEY, MOD):
-        from Form.window import Window
-        if KEY == key.ESCAPE:
+    def on_key_press(self, symbol, modifiers):
+        if symbol == key.ESCAPE:
             tf = TextureFactory([self.board])
             tf.generate_single_texture(str(self.filename), self.board)
-            Window.RESTART = True
+            self.finally_func()
             self.close()
             del self
 
@@ -126,7 +129,6 @@ class Game(pyglet.window.Window):
         for x in range(rect.top_left.x, rect.bottom_right.x + 1):
             for y in range(rect.top_left.y, rect.bottom_right.y + 1):
                 self.squares[self.board.cols - y - 1][x].color = color
-        self.check_solution()
 
     def check_mouse_movement(self) -> bool:
         return not (self.released_cords[0] < 0 or
@@ -135,7 +137,7 @@ class Game(pyglet.window.Window):
                     self.released_cords[1] > self.board.rows - 1)
 
     def check_solution(self):
-        if self.board.verifySolution():
+        if self.board.verify_solution():
             label = pyglet.text.Label(
                 'Congratulations!',
                 font_name='Arial',

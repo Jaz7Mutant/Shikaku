@@ -1,6 +1,6 @@
-import unittest
-import sys
 import os
+import sys
+import unittest
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
@@ -24,3 +24,11 @@ class TestBoard(unittest.TestCase):
                          [[], [[0, 0], [0, 1], [0, 2], [1, 0], [1, 2]],
                           [[1, 1], [2, 0],
                            [2, 1], [2, 2]]])
+        self.assertEqual(
+            board.solution, [[0, 1, -1], [-1, -1, -1], [-1, 2, -1]])
+
+    def test_verify_solution(self):
+        board = GameBoard('tests/test_puzzle.txt')
+        board.read_board()
+        board.solution = [[0, 1, 1], [0, 1, 1], [0, 2, 2]]
+        self.assertTrue(board.verify_solution())

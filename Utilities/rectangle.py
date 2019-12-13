@@ -12,6 +12,7 @@ class Rectangle:
        |-----bottom_right         V
                                  +oo
     """
+
     def __init__(self, board: GameBoard,
                  position_1: Point,
                  position_2: Point,
@@ -35,8 +36,8 @@ class Rectangle:
         """
         for row in range(self.top_left.y, self.bottom_right.y + 1):
             for col in range(self.top_left.x, self.bottom_right.x + 1):
-                if self.board.solution[row][col] != self.color and \
-                        self.board.solution[row][col] != -1:
+                if (self.board.solution[row][col] != self.color and
+                        self.board.solution[row][col] != -1):
                     return True
         return False
 

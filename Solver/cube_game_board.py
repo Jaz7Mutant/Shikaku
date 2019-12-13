@@ -1,5 +1,5 @@
-from Solver.game_board import GameBoard
 from Solver.block import Block
+from Solver.game_board import GameBoard
 
 
 class CubeGameBoard:
@@ -27,9 +27,9 @@ class CubeGameBoard:
                             curr_board.board[row][col] = int(cell)
                             curr_board.blocks.append(
                                 Block(row, col, int(cell)))
-                        if col == 9:
+                        if col == curr_board.cols - 1:
                             break
-                    if row == 9:
+                    if row == curr_board.cols - 1:
                         break
 
                 input_file.readline()

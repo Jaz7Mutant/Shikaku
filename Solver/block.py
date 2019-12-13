@@ -8,6 +8,7 @@ class Block:
     row, col -- position on board
     factors -- factors list of number value
     """
+
     def __init__(self, row: int, col: int, value: int):
         self.row = row
         self.col = col

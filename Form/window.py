@@ -3,7 +3,7 @@ from typing import List
 from pyglet.gl import *
 from pyglet.window import key
 
-import Form.game
+from Form.game import start_game
 from Form.cube import Cube
 from Form.cube_face import CubeFace
 from Form.player import Player
@@ -22,14 +22,20 @@ def start(boards: List[GameBoard]):
     window.set_minimum_size(300, 200)
     window.set_exclusive_mouse(True)
     window.set_mouse_visible(False)
-    pyglet.app.run()
+
+    # Suppress .flip() exception while stopping event loop.
+    # Only way to fix it is make a custom event loop, but there is no need
+    try:
+        pyglet.app.run()
+    except AttributeError:
+        pass
 
 
 def push(pos, rot):
     glPushMatrix()
     glRotatef(-rot[0], 1, 0, 0)
     glRotatef(-rot[1], 0, 1, 0)
-    glTranslatef(-pos[0], -pos[1], -pos[2], )
+    glTranslatef(-pos[0], -pos[1], -pos[2])
 
 
 def model():
@@ -43,8 +49,6 @@ def projection():
 
 
 class Window(pyglet.window.Window):
-    RESTART = False
-
     def __init__(self, boards: List[GameBoard], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.keys = key.KeyStateHandler()
@@ -65,17 +69,13 @@ class Window(pyglet.window.Window):
     def on_mouse_motion(self, x, y, dx, dy):
         self.player.mouse_motion(dx, dy)
 
-    def on_key_press(self, KEY, MOD):
-        if KEY == key.ESCAPE:
+    def on_key_press(self, symbol, modifiers):
+        if symbol == key.ESCAPE:
+            pyglet.clock.unschedule(self.update)
             self.close()
             del self
 
     def on_draw(self):
-        if Window.RESTART:
-            for cube_face in self.cube_faces:
-                cube_face.restart()
-            self.cube = Cube(True)
-            Window.RESTART = False
         self.clear()
         self.set3d()
         push(self.player.pos, self.player.rot)
@@ -86,9 +86,15 @@ class Window(pyglet.window.Window):
             else:
                 self.player.pos = cube_face.get_player_pos()
                 self.keys.clear()
-                Form.game.start(str(field_num), self.boards[field_num])
+                start_game(str(field_num), self.boards[field_num], self.reload)
                 return
         glPopMatrix()
+
+    def reload(self):
+        self.keys.clear()
+        for cube_face in self.cube_faces:
+            cube_face.restart()
+        self.cube = Cube(True)
 
     def set3d(self):
         projection()

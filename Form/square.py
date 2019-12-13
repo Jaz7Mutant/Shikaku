@@ -19,12 +19,12 @@ class Square:
             font_name='Arial',
             font_size=20,
             color=(0, 0, 0, 255),
-            x=(point1.x+point2.x)//2,
-            y=(point1.y+point2.y)//2,
+            x=(point1.x + point2.x) // 2,
+            y=(point1.y + point2.y) // 2,
             anchor_x='center', anchor_y='center')
 
     def draw(self):
         pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,
                              ('v2f', self.cords),
-                             ('c3B', self.color * int(len(self.cords)/2)))
+                             ('c3B', self.color * int(len(self.cords) / 2)))
         self.label.draw()

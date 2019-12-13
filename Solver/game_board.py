@@ -39,10 +39,9 @@ class GameBoard:
         self.solution = list(list())
         self.blocks = list()
         self.final_cells_values = list(list())
-        # self.read_board(filename)
         self.filename = filename
 
-    def print_solution(self) -> None:
+    def print_solution(self):
         """
         Print solution with colors
 
@@ -56,7 +55,6 @@ class GameBoard:
                 color = int(symbol) % (len(BACK_COLORS) - 1)
                 if self.board[row_num][col_num] == -1:
                     current_line = colorize_back(void, BACK_COLORS[color])
-                    # print(current_line, end='')
                     curr_row_with_num += current_line
                     current_row += current_line
                 else:
@@ -66,14 +64,12 @@ class GameBoard:
                             BACK_COLORS[color]),
                         FORE_COLORS[0])
                     curr_row_with_num += current_line
-                    # print(current_line, end='')
                     current_row += colorize_back(void, BACK_COLORS[color])
-            # print('\n' + current_row)
             print(current_row)
             print(curr_row_with_num)
             print(current_row)
 
-    def read_board(self) -> None:
+    def read_board(self):
         """
         Read board from disk using its filename
 
@@ -127,34 +123,31 @@ class GameBoard:
         self._update_final_cells_values()
         self.solution = initial_solution_state
 
-    def verifySolution(self) -> bool:
-
-        # Verify the following things about each anchor i which is in position (row,col) and has value val.
-        #  (1) solution[row][col] should equal i due to the chosen solution format.
-        #  (2) the number of i's in solution should equal val.
-        #  (3) the i's in solution should form a rectangle.
+    def verify_solution(self) -> bool:
+        # Verify every block
         for i, block in enumerate(self.blocks):
-
-            # Verify (1).
+            # solution[row][col] should equal block number (i)
             if self.solution[block.row][block.col] != i:
                 return False
 
             # Get all positions where solution is equal to i.
-            wherei = [(r, c) for r in range(self.rows)
-                      for c in range(self.cols) if self.solution[r][c] == i]
-            numi = len(wherei)
+            i_positions = [
+                (r, c) for r in range(self.rows)
+                for c in range(self.cols) if self.solution[r][c] == i
+            ]
+            block_number = len(i_positions)
 
-            # Verify (2).
-            if numi != block.value:
+            # Block number should equal its value.
+            if block_number != block.value:
                 return False
 
-            # Verify (3).
-            left = min(wherei, key=lambda x: x[0])[0]
-            right = max(wherei, key=lambda x: x[0])[0]
-            top = min(wherei, key=lambda x: x[1])[1]
-            bottom = max(wherei, key=lambda x: x[1])[1]
+            # Number should form a rectangle.
+            left = min(i_positions, key=lambda x: x[0])[0]
+            right = max(i_positions, key=lambda x: x[0])[0]
+            top = min(i_positions, key=lambda x: x[1])[1]
+            bottom = max(i_positions, key=lambda x: x[1])[1]
             area = (right - left + 1) * (bottom - top + 1)
-            if area != numi:
+            if area != block_number:
                 return False
 
         return True
