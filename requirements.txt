@@ -2,4 +2,4 @@ pyglet
 colorama
 numpy
 pyrr
-PIL
+Pillow

@@ -14,10 +14,11 @@ First line contains numbers of rows and cols
 '-' means empty space
 numbers means the area of rectangle that should contain it cell
 """
-import sys
 from copy import deepcopy
+
 from Solver.block import Block
-from Utilities.colors import BACK_COLORS, colorize_back, colorize_front, FORE_COLORS
+from Utilities.colors import BACK_COLORS, colorize_back, colorize_front, \
+    FORE_COLORS
 from Utilities.point import Point
 
 
@@ -112,11 +113,12 @@ class GameBoard:
             for factor in self.blocks[k].factors:
                 for i in range(curr_value // factor):
                     for j in range(factor):
-                        top_left = \
-                            Point(curr_col + i - curr_value // factor + 1,
-                                  curr_row - j)
-                        bottom_right = \
-                            Point(curr_col + i, curr_row + factor - 1 - j)
+                        top_left = Point(
+                            curr_col + i - curr_value // factor + 1,
+                            curr_row - j)
+                        bottom_right = Point(
+                            curr_col + i,
+                            curr_row + factor - 1 - j)
                         try:
                             rect = Rectangle(self, top_left, bottom_right, k)
                             rect.draw_rectangle()
@@ -138,8 +140,8 @@ class GameBoard:
                 return False
 
             # Get all positions where solution is equal to i.
-            wherei = [(r, c) for r in range(self.rows) for c in range(self.cols) if
-                      self.solution[r][c] == i]
+            wherei = [(r, c) for r in range(self.rows)
+                      for c in range(self.cols) if self.solution[r][c] == i]
             numi = len(wherei)
 
             # Verify (2).

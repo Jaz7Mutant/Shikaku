@@ -12,10 +12,9 @@ from Form import window
 def main():
     colorama.init()
     namespace = parse_args()
-    namespace.cube = True # todo
     filenames = sorted(
-        glob.glob('Resources/puzzles/*.txt')) if not namespace.cube else sorted(
-        glob.glob('Resources/cube_puzzles/*.txt'))
+        glob.glob('Resources/puzzles/*.txt')) if not namespace.cube \
+        else sorted(glob.glob('Resources/cube_puzzles/*.txt'))
     for filename in filenames:
         if namespace.cube:
             board = CubeGameBoard(filename)

@@ -25,7 +25,8 @@ class CubeGameBoard:
                             curr_board.board[row][col] = -1
                         else:
                             curr_board.board[row][col] = int(cell)
-                            curr_board.blocks.append(Block(row, col, int(cell)))
+                            curr_board.blocks.append(
+                                Block(row, col, int(cell)))
                         if col == 9:
                             break
                     if row == 9:
@@ -33,5 +34,3 @@ class CubeGameBoard:
 
                 input_file.readline()
                 curr_board.initialize_board_solution()
-
-
