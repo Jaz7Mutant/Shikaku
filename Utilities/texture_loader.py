@@ -1,4 +1,3 @@
-import pyglet
 from pyglet.gl import *
 from pyglet.graphics import TextureGroup
 
