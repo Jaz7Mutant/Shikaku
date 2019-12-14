@@ -41,7 +41,7 @@ def parse_args():
     parser = argparse.ArgumentParser(add_help=True)
 
     parser.add_argument(
-        '-cube',
+        '--cube',
         help='2D rectangle or 3D cube shikaku',
         action='store_true'
     )

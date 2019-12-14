@@ -40,4 +40,4 @@ class Player:
             self.pos[1] -= s
 
         self.i += 0.01
-        self.i %= 10
+        self.i %= 100

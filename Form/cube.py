@@ -71,4 +71,4 @@ class Cube:
         self.sides[5].vertices = A + B + C + D
         self.batch.draw()
         self.i += 0.01
-        self.i %= 10
+        self.i %= 100
