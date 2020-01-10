@@ -4,7 +4,7 @@ import unittest
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from Utilities.point import Point
+from utilities.point import Point
 
 
 class TestPoint(unittest.TestCase):

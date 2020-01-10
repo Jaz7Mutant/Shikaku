@@ -3,11 +3,11 @@ from typing import List
 from pyglet.gl import *
 from pyglet.window import key
 
-from Form.game import start_game
-from Form.cube import Cube
-from Form.cube_face import CubeFace
-from Form.player import Player
-from Solver.game_board import GameBoard
+from form.game import start_game
+from form.cube import Cube
+from form.cube_face import CubeFace
+from form.player import Player
+from solver.game_board import GameBoard
 
 
 def start(boards: List[GameBoard]):
@@ -59,7 +59,7 @@ class Window(pyglet.window.Window):
         self.cube_faces = []
         for i in range(6):
             self.cube_faces.append(CubeFace(
-                'Resources/textures/' + str(i) + '.png',
+                'resources/textures/' + str(i) + '.png',
                 i + 3, 0, 0, i + 3.5, 0.5, 0))
         pyglet.clock.schedule(self.update)
 

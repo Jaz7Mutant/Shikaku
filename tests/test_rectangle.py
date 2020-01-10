@@ -4,9 +4,9 @@ import unittest
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from Utilities.rectangle import Rectangle
-from Utilities.point import Point
-from Solver.game_board import GameBoard
+from utilities.rectangle import Rectangle
+from utilities.point import Point
+from solver.game_board import GameBoard
 
 
 class TestRectangle(unittest.TestCase):

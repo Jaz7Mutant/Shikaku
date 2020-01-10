@@ -1,5 +1,5 @@
-from Solver.game_board import GameBoard
-from Utilities.point import Point
+from solver.game_board import GameBoard
+from utilities.point import Point
 
 
 class Rectangle:

@@ -4,7 +4,7 @@ import unittest
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from Solver.block import Block
+from solver.block import Block
 
 
 class TestBlock(unittest.TestCase):

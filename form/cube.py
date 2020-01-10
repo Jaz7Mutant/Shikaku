@@ -1,7 +1,7 @@
 import math
 from pyglet.gl import *
 
-from Utilities.texture_loader import get_texture
+from utilities.texture_loader import get_texture
 
 
 class Cube:

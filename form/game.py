@@ -4,12 +4,12 @@ from typing import Callable
 from pyglet.gl import *
 from pyglet.window import key, mouse
 
-from Form.square import Square
-from Solver.game_board import GameBoard
-from Utilities.point import Point
-from Utilities.rectangle import Rectangle
-from Utilities.texture_colors import COLORS
-from Utilities.texture_factory import TextureFactory
+from form.square import Square
+from solver.game_board import GameBoard
+from utilities.point import Point
+from utilities.rectangle import Rectangle
+from utilities.texture_colors import COLORS
+from utilities.texture_factory import TextureFactory
 
 
 def start_game(field_num: str, game_board: GameBoard, finally_func: Callable):

@@ -4,7 +4,7 @@ from pyglet import graphics
 from pyglet.gl import *
 from pyglet.text import Label
 
-from Utilities.point import Point
+from utilities.point import Point
 
 
 class Square:

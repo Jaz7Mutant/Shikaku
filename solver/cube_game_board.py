@@ -1,5 +1,5 @@
-from Solver.block import Block
-from Solver.game_board import GameBoard
+from solver.block import Block
+from solver.game_board import GameBoard
 
 
 class CubeGameBoard:

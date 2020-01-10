@@ -3,19 +3,19 @@ import glob
 
 import colorama
 
-from Form.window import start
-from Solver.cube_game_board import CubeGameBoard
-from Solver.game_board import GameBoard
-from Solver.solver import Solver
-from Utilities.texture_factory import TextureFactory
+from form.window import start
+from solver.cube_game_board import CubeGameBoard
+from solver.game_board import GameBoard
+from solver.solver import Solver
+from utilities.texture_factory import TextureFactory
 
 
 def main():
     colorama.init()
     namespace = parse_args()
     file_names = sorted(
-        glob.glob('Resources/puzzles/*.txt')) if not namespace.cube \
-        else sorted(glob.glob('Resources/cube_puzzles/*.txt'))
+        glob.glob('resources/puzzles/*.txt')) if not namespace.cube \
+        else sorted(glob.glob('resources/cube_puzzles/*.txt'))
 
     for filename in file_names:
         if namespace.cube:

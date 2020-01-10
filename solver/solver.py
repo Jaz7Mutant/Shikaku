@@ -1,6 +1,6 @@
-from Solver.game_board import GameBoard
-from Utilities.point import Point
-from Utilities.rectangle import Rectangle
+from solver.game_board import GameBoard
+from utilities.point import Point
+from utilities.rectangle import Rectangle
 
 
 class Solver:

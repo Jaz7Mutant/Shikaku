@@ -2,8 +2,8 @@ from typing import List
 
 from PIL import Image, ImageFont, ImageDraw
 
-from Solver.game_board import GameBoard
-from Utilities.texture_colors import COLORS
+from solver.game_board import GameBoard
+from utilities.texture_colors import COLORS
 
 
 class TextureFactory:
@@ -55,7 +55,7 @@ class TextureFactory:
             curr_file = str(file_num)
             if self.filename is not None:
                 curr_file = self.filename
-            image.save('Resources/textures/' + curr_file + '.png', 'PNG')
+            image.save('resources/textures/' + curr_file + '.png', 'PNG')
 
     def generate_single_texture(self, filename: str, board: GameBoard):
         self.boards = [board]
